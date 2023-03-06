@@ -16,3 +16,7 @@ img {
   display: block;
   max-width: 100%;
 }
+ul, li a{
+  list-style: none;
+  text-decoration: none;
+}
