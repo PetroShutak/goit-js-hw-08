@@ -3,6 +3,7 @@ import throttle from 'lodash.throttle'; // імпорт throttle з бібліо
  
 // 2.0. 
 const iframe = document.querySelector('#vimeo-player'); // отримуємо iframe з DOM
+iframe.classList.add('centered-video'); // додаємо клас centered-video до iframe
 const player = new Player(iframe);  // створюємо новий екземпляр класу Player і передаємо в нього iframe
 player.on('timeupdate', throttle(saveCurrentTime, 1000)); 
 // викликаємо метод on() класу Player і передаємо в нього назву події timeupdate і функцію throttle() 
