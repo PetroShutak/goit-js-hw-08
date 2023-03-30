@@ -3,7 +3,7 @@ import throttle from 'lodash.throttle';
 // extra variant
 const LOCAL_KEY = 'feedback-form-state'; 
 const form = document.querySelector('.feedback-form'); 
-
+form.classList.add('centered');
 populateFeedbackForm(); 
 form.addEventListener('submit', onFormSubmit); 
 form.addEventListener('input', throttle(onInputData, 500)); 
