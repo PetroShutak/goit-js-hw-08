@@ -1,49 +1,40 @@
-import throttle from 'lodash.throttle'; // імпортуємо throttle з бібліотеки lodash
+import throttle from 'lodash.throttle'; 
 
 // extra variant
-const LOCAL_KEY = 'feedback-form-state'; // створюмо ключ для localStorage
-const form = document.querySelector('.feedback-form'); // створюємо змінну для форми
+const LOCAL_KEY = 'feedback-form-state'; 
+const form = document.querySelector('.feedback-form'); 
 
-populateFeedbackForm(); // викликаємо функцію для заповнення форми з localStorage
-form.addEventListener('submit', onFormSubmit); // додаємо слухача на форму
-form.addEventListener('input', throttle(onInputData, 500)); // додаємо слухача на форму з throttle (500мс) для збереження в localStorage
-
-function onFormSubmit(e) { // функція для збереження даних в localStorage
-  e.preventDefault(); // відміняємо дію по замовчуванню
-  const { email, message } = e.currentTarget.elements; // деструктуризація об'єкта
-  console.log({ email: email.value, message: message.value }); // виводимо в консоль
-  localStorage.removeItem(LOCAL_KEY); // видаляємо з localStorage
-  e.currentTarget.reset(); // очищаємо форму після відправки методом reset() який викликається на формі 
+populateFeedbackForm(); 
+form.addEventListener('submit', onFormSubmit); 
+form.addEventListener('input', throttle(onInputData, 500)); 
+function onFormSubmit(e) { 
+  e.preventDefault(); 
+  const { email, message } = e.currentTarget.elements; 
+  console.log({ email: email.value, message: message.value }); 
+  localStorage.removeItem(LOCAL_KEY); 
+  e.currentTarget.reset(); 
 }
 
-function onInputData(e) { // функція для збереження даних в localStorage 
-  let data = localStorage.getItem(LOCAL_KEY);  // отримуємо дані з localStorage методом getItem() який викликається на localStorage
-  data = data ? JSON.parse(data) : {}; // перевіряємо чи є дані в localStorage, якщо є то парсимо їх методом JSON.parse() який викликається на JSON, якщо немає то створюємо пустий об'єкт
-  let { email, message } = form.elements; // деструктуризація об'єкта для отримання значень з форми
-  data = { // створюємо об'єкт з даними з форми методом деструктуризації об'єкта data з даними з форми
-    email: email.value.trim(), // видаляємо пробіли методом trim() який викликається на строкі
-    message: message.value.trim(), // видаляємо пробіли методом trim() який викликається на строкі
+function onInputData(e) { 
+  let data = localStorage.getItem(LOCAL_KEY);  
+  data = data ? JSON.parse(data) : {}; 
+  let { email, message } = form.elements; 
+  data = { 
+    email: email.value.trim(), 
+    message: message.value.trim(), 
   };
 
   //  data[e.target.name] = e.target.value.trim(); 
-  localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); // записуємо дані в localStorage методом setItem() який викликається на localStorage
-  // JSON.stringify() - це метод який перетворює об'єкт або масив в строку
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); 
 }
 
 function populateFeedbackForm() { 
-  // функція для заповнення форми з localStorage яку викликаємо при завантаженні сторінки для 
-  // заповнення форми даними з localStorage
-  let data = localStorage.getItem(LOCAL_KEY); // отримуємо дані з localStorage методом getItem() який викликається на localStorage
-  if (data) { // перевіряємо чи є дані в localStorage
-    data = JSON.parse(data); // парсимо дані з localStorage методом JSON.parse() який викликається на JSON
-    // JSON.parse() - це метод який перетворює строку в об'єкт або масив
-    Object.entries(data).forEach(([name, value]) => { // перебираємо об'єкт з даними з localStorage методом Object.entries() який викликається на Object
+  
+  let data = localStorage.getItem(LOCAL_KEY); 
+  if (data) { 
+    data = JSON.parse(data); 
+    Object.entries(data).forEach(([name, value]) => { 
       form.elements[name].value = value ?? ''; 
-      // записуємо дані з localStorage в форму методом value який викликається на елементі форми і 
-      // оператором ?? який викликається на строці якщо значення value не існує то записуємо пусту строку ''
-      // ?? - це новий оператор який використовується для перевірки на nullish значення 
-      // він відрізняється від || тим що || перевіряє на false значення, а ?? перевіряє на nullish значення 
-      // наприклад 0, '', false, null, undefined, NaN
     });
   }
 }
